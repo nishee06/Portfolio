@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nishee Chaubey | Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #080b0f;
+      --bg2:       #0d1117;
+      --bg3:       #111820;
+      --green:     #39ff9f;
+      --green-dim: #1aff7a55;
+      --cyan:      #00d4ff;
+      --amber:     #f7c948;
+      --red:       #ff5f6d;
+      --text:      #c9d1da;
+      --text-dim:  #58626d;
+      --border:    #1e2a38;
+      --mono:      'JetBrains Mono', monospace;
+      --sans:      'Syne', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--green); border-radius: 2px; }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px;
+      pointer-events: none;
+      opacity: 0.35;
+    }
+
+    /* ─── GRID LINES ─── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      opacity: 0.25;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px;
+      background: rgba(8,11,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--sans);
+      font-size: 20px; font-weight: 800;
+      color: var(--green);
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--text-dim); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--text-dim); text-decoration: none;
+      font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--green); }
+
+    /* ─── WRAPPER ─── */
+    .wrapper { position: relative; z-index: 1; }
+
+    /* ─── SECTION BASE ─── */
+    section { padding: 120px 0; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 32px; }
+
+    /* ─── SECTION LABEL ─── */
+    .section-label {
+      font-size: 11px; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--green);
+      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--green-dim), transparent);
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 0;
+    }
+    .hero-inner {
+      max-width: 1000px; margin: 0 auto; padding: 0 32px;
+      width: 100%;
+    }
+    .hero-prompt {
+      font-size: 12px; color: var(--green); margin-bottom: 24px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hero-prompt::before {
+      content: '$'; color: var(--green); font-weight: 700;
+    }
+    #typed-text {
+      border-right: 2px solid var(--green);
+      animation: blink 0.7s step-end infinite;
+      white-space: nowrap; overflow: hidden;
+    }
+    @keyframes blink { 50% { border-color: transparent; } }
+
+    .hero-name {
+      font-family: var(--sans);
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -3px;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .hero-name .accent { color: var(--green); }
+
+    .hero-title {
+      font-size: 16px; color: var(--cyan);
+      margin-bottom: 24px; letter-spacing: 1px;
+    }
+
+    .hero-desc {
+      max-width: 560px;
+      color: var(--text-dim); font-size: 14px;
+      line-height: 1.8; margin-bottom: 40px;
+    }
+
+    .hero-links { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 4px;
+      font-family: var(--mono); font-size: 12px;
+      letter-spacing: 1px; text-decoration: none;
+      cursor: pointer; transition: all 0.2s;
+      text-transform: uppercase;
+    }
+    .btn-primary {
+      background: var(--green); color: #000; font-weight: 700;
+      border: 1px solid var(--green);
+    }
+    .btn-primary:hover { background: transparent; color: var(--green); }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--green); color: var(--green); }
+
+    .hero-stats {
+      display: flex; gap: 48px; margin-top: 80px;
+      padding-top: 48px; border-top: 1px solid var(--border);
+    }
+    .stat-val {
+      font-family: var(--sans); font-size: 36px; font-weight: 800;
+      color: #fff; line-height: 1;
+    }
+    .stat-val span { color: var(--green); }
+    .stat-label { font-size: 11px; color: var(--text-dim); margin-top: 4px; letter-spacing: 1px; }
+
+    /* ─── ABOUT ─── */
+    #about .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;
+    }
+    .about-text h2 {
+      font-family: var(--sans); font-size: 40px; font-weight: 800;
+      color: #fff; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;
+    }
+    .about-text p { color: var(--text-dim); line-height: 1.9; margin-bottom: 16px; }
+    .about-text p strong { color: var(--cyan); font-weight: 500; }
+
+    .contact-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 32px;
+    }
+    .contact-card h3 {
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 24px;
+    }
+    .contact-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .contact-item:last-child { border-bottom: none; }
+    .contact-icon { color: var(--green); width: 18px; text-align: center; }
+    .contact-item a { color: var(--cyan); text-decoration: none; }
+    .contact-item a:hover { color: var(--green); }
+
+    /* ─── SKILLS ─── */
+    #skills { background: var(--bg2); }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .skill-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 28px;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .skill-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--green), transparent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .skill-card:hover::before { transform: scaleX(1); }
+    .skill-card:hover { border-color: var(--green-dim); transform: translateY(-3px); }
+    .skill-cat {
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--green); margin-bottom: 16px;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      background: var(--bg2); border: 1px solid var(--border);
+      color: var(--text); font-size: 12px;
+      padding: 4px 12px; border-radius: 4px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .tag:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    /* ─── PROJECTS ─── */
+    .projects-list { display: flex; flex-direction: column; gap: 20px; }
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 36px;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 24px; align-items: start;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .project-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 0% 0%, var(--green-dim) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .project-card:hover::after { opacity: 1; }
+    .project-card:hover { border-color: var(--green-dim); transform: translateX(4px); }
+
+    .project-header { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+    .project-num {
+      font-size: 11px; color: var(--text-dim);
+      border: 1px solid var(--border); padding: 2px 8px; border-radius: 3px;
+    }
+    .project-title {
+      font-family: var(--sans); font-size: 22px; font-weight: 700;
+      color: #fff;
+    }
+    .project-subtitle { font-size: 11px; color: var(--green); letter-spacing: 1px; }
+    .project-desc { color: var(--text-dim); line-height: 1.8; margin: 12px 0; }
+    .project-bullets { list-style: none; margin-top: 12px; }
+    .project-bullets li {
+      display: flex; gap: 10px; color: var(--text-dim); font-size: 13px;
+      padding: 4px 0;
+    }
+    .project-bullets li::before { content: '→'; color: var(--green); flex-shrink: 0; }
+    .project-meta { text-align: right; }
+    .project-date {
+      font-size: 11px; color: var(--text-dim); letter-spacing: 1px;
+      white-space: nowrap;
+    }
+    .project-lang {
+      display: inline-block; margin-top: 8px;
+      font-size: 11px; color: var(--amber);
+      border: 1px solid var(--amber)33; padding: 3px 10px; border-radius: 3px;
+    }
+
+    /* ─── EDUCATION ─── */
+    #education { background: var(--bg2); }
+    .edu-list { display: flex; flex-direction: column; gap: 20px; }
+    .edu-card {
+      background: var(--bg3);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 32px; display: flex; gap: 32px; align-items: flex-start;
+      transition: border-color 0.2s;
+    }
+    .edu-card:hover { border-color: var(--cyan); }
+    .edu-icon {
+      width: 48px; height: 48px; flex-shrink: 0;
+      border: 1px solid var(--border); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: var(--cyan);
+    }
+    .edu-degree {
+      font-family: var(--sans); font-size: 20px; font-weight: 700; color: #fff;
+      margin-bottom: 4px;
+    }
+    .edu-school { color: var(--cyan); font-size: 13px; margin-bottom: 8px; }
+    .edu-period {
+      font-size: 11px; color: var(--text-dim); letter-spacing: 1px;
+      border: 1px solid var(--border); display: inline-block;
+      padding: 2px 10px; border-radius: 3px;
+    }
+    .edu-note { color: var(--text-dim); font-size: 13px; margin-top: 8px; }
+
+    /* ─── CERTIFICATIONS ─── */
+    .cert-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .cert-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 24px;
+      display: flex; gap: 16px; align-items: flex-start;
+      transition: border-color 0.2s;
+    }
+    .cert-card:hover { border-color: var(--amber); }
+    .cert-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green); flex-shrink: 0; margin-top: 6px;
+    }
+    .cert-dot.red { background: var(--red); }
+    .cert-dot.amber { background: var(--amber); }
+    .cert-dot.cyan { background: var(--cyan); }
+    .cert-name { color: #fff; font-size: 13px; margin-bottom: 4px; }
+    .cert-org { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; }
+    .cert-date { font-size: 11px; color: var(--green); margin-top: 4px; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 32px; text-align: center;
+      color: var(--text-dim); font-size: 12px;
+    }
+    footer a { color: var(--green); text-decoration: none; }
+    footer .prompt { color: var(--green); margin-right: 6px; }
+
+    /* ─── REVEAL ANIMATIONS ─── */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      .hero-inner, .container { padding: 0 20px; }
+      #about .about-grid { grid-template-columns: 1fr; gap: 32px; }
+      .hero-stats { gap: 24px; flex-wrap: wrap; }
+      .project-card { grid-template-columns: 1fr; }
+      .project-meta { text-align: left; }
+      section { padding: 80px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">NC<span>.dev</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#education">education</a></li>
+    <li><a href="#certifications">certs</a></li>
+  </ul>
+</nav>
+
+<div class="wrapper">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero-prompt">
+        <span id="typed-text"></span>
+      </div>
+      <h1 class="hero-name">
+        Nishee<br><span class="accent">Chaubey</span>
+      </h1>
+      <div class="hero-title">Systems Programmer · Linux Engineer · MCA Graduate</div>
+      <p class="hero-desc">
+        Building reliable system-level software from the ground up.
+        Passionate about open-source, low-level networking, and writing code
+        that speaks directly to the kernel.
+      </p>
+      <div class="hero-links">
+        <a href="mailto:nisheechaubey@gmail.com" class="btn btn-primary">✉ Contact Me</a>
+        <a href="#projects" class="btn btn-outline">View Projects</a>
+        <a href="https://nishee06.github.io/Portfolio/portfolio.html" target="_blank" class="btn btn-outline">↗ Live Site</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-val">4<span>+</span></div>
+          <div class="stat-label">Projects Built</div>
+        </div>
+        <div>
+          <div class="stat-val">5<span>+</span></div>
+          <div class="stat-label">Certifications</div>
+        </div>
+        <div>
+          <div class="stat-val">3<span>+</span></div>
+          <div class="stat-label">Languages</div>
+        </div>
+        <div>
+          <div class="stat-val">2<span>+</span></div>
+          <div class="stat-label">Years Linux</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="section-label reveal">01 // about</div>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <h2>Who I Am</h2>
+          <p>
+            I'm an <strong>MCA graduate</strong> from ITM University with a deep love for systems software.
+            I thrive in the terminal — writing C programs that talk directly to sockets, crafting
+            Bash scripts that automate the mundane, and debugging gnarly issues with
+            <strong>journalctl</strong> and <strong>dmesg</strong>.
+          </p>
+          <p>
+            My experience spans from <strong>low-level TCP/IP socket programming</strong> in C
+            to full-stack web applications in Django, multi-threaded Python utilities,
+            and containerization with Docker. I'm equally comfortable at the kernel boundary
+            and in a modern web framework.
+          </p>
+          <p>
+            I hold a <strong>Red Hat Certified System Administrator (RHCSA)</strong> certification
+            and have completed multiple Linux Foundation and Cisco Networking Academy courses,
+            reinforcing my belief that understanding the foundation is what separates good engineers
+            from great ones.
+          </p>
+        </div>
+        <div class="reveal">
+          <div class="contact-card">
+            <h3>// contact.info</h3>
+            <div class="contact-item">
+              <span class="contact-icon">✉</span>
+              <a href="mailto:nisheechaubey@gmail.com">nisheechaubey@gmail.com</a>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">☎</span>
+              <span>+91-8445095498</span>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">⌖</span>
+              <span>Pune, India</span>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">↗</span>
+              <a href="https://nishee06.github.io/Portfolio/portfolio.html" target="_blank">nishee06.github.io</a>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">⚑</span>
+              <span>English (Fluent) · Hindi (Native)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <div class="section-label reveal">02 // skills</div>
+      <div class="skills-grid">
+        <div class="skill-card reveal">
+          <div class="skill-cat">Languages</div>
+          <div class="skill-tags">
+            <span class="tag">Python</span>
+            <span class="tag">C</span>
+            <span class="tag">Shell / Bash</span>
+            <span class="tag">HTML5</span>
+            <span class="tag">SQL</span>
+          </div>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-cat">Operating Systems</div>
+          <div class="skill-tags">
+            <span class="tag">Ubuntu</span>
+            <span class="tag">Fedora</span>
+            <span class="tag">Linux CLI</span>
+            <span class="tag">Networking</span>
+            <span class="tag">journalctl</span>
+            <span class="tag">dmesg</span>
+          </div>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-cat">DevOps & Cloud</div>
+          <div class="skill-tags">
+            <span class="tag">Docker</span>
+            <span class="tag">Git & GitHub</span>
+            <span class="tag">KVM</span>
+            <span class="tag">VMware</span>
+            <span class="tag">OpenShift</span>
+            <span class="tag">Kubernetes</span>
+          </div>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-cat">Frameworks & Tools</div>
+          <div class="skill-tags">
+            <span class="tag">Django</span>
+            <span class="tag">PyQt</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">Tailwind CSS</span>
+            <span class="tag">curl / wget</span>
+          </div>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-cat">Soft Skills</div>
+          <div class="skill-tags">
+            <span class="tag">Troubleshooting</span>
+            <span class="tag">Root Cause Analysis</span>
+            <span class="tag">Technical Comms</span>
+            <span class="tag">Collaboration</span>
+          </div>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-cat">AI Tools</div>
+          <div class="skill-tags">
+            <span class="tag">Claude</span>
+            <span class="tag">Gemini</span>
+            <span class="tag">Debugging Assist</span>
+            <span class="tag">Code Review</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="container">
+      <div class="section-label reveal">03 // projects</div>
+      <div class="projects-list">
+
+        <div class="project-card reveal">
+          <div>
+            <div class="project-header">
+              <span class="project-num">#01</span>
+              <div>
+                <div class="project-title">Download Accelerator</div>
+                <div class="project-subtitle">Python Concurrency &amp; Performance</div>
+              </div>
+            </div>
+            <ul class="project-bullets">
+              <li>Built a high-performance download utility using multi-threading to split large files into concurrent segments.</li>
+              <li>Used synchronization primitives (Locks / Semaphores) to prevent race conditions and ensure data integrity.</li>
+              <li>Implemented efficient file I/O logic to correctly merge downloaded segments of any MIME type.</li>
+              <li>Reduced average download time by ~40% compared to single-threaded implementation for large files.</li>
+              <li>Developed a PyQt-based GUI to monitor download progress and control execution.</li>
+            </ul>
+          </div>
+          <div class="project-meta">
+            <div class="project-date">April 2026</div>
+            <span class="project-lang">Python</span>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div>
+            <div class="project-header">
+              <span class="project-num">#02</span>
+              <div>
+                <div class="project-title">Local Web Server</div>
+                <div class="project-subtitle">C Systems Programming &amp; Networking</div>
+              </div>
+            </div>
+            <ul class="project-bullets">
+              <li>Designed and implemented a lightweight HTTP web server in C using Linux system libraries (sys/socket.h, netinet/in.h) for low-level TCP/IP socket programming.</li>
+              <li>Implemented socket binding, listening, and connection handling for multiple LAN clients.</li>
+              <li>Supported serving static content (HTML, images, documents) with correct MIME-type handling.</li>
+              <li>Worked on CLI part to launch the program quickly passing port as argument </li>
+            </ul>
+          </div>
+          <div class="project-meta">
+            <div class="project-date">November 2024</div>
+            <span class="project-lang">C</span>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div>
+            <div class="project-header">
+              <span class="project-num">#03</span>
+              <div>
+                <div class="project-title">College Forum</div>
+                <div class="project-subtitle">Full-Stack Web Application · Python &amp; Linux</div>
+              </div>
+            </div>
+            <ul class="project-bullets">
+              <li>Developed a RESTful web application using Django to enable authenticated discussion between students and faculty.</li>
+              <li>Implemented user authentication, role-based access control, and secure session handling.</li>
+              <li>Designed relational data models using Django ORM with MySQL/PostgreSQL integration.</li>
+              <li>Built responsive frontend with HTML5 and Tailwind CSS; deployed on Linux environment.</li>
+            </ul>
+          </div>
+          <div class="project-meta">
+            <div class="project-date">March 2025</div>
+            <span class="project-lang">Python / Django</span>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div>
+            <div class="project-header">
+              <span class="project-num">#04</span>
+              <div>
+                <div class="project-title">File Downloader</div>
+                <div class="project-subtitle">Bash Scripting &amp; Linux Utilities</div>
+              </div>
+            </div>
+            <ul class="project-bullets">
+              <li>Developed a CLI automation tool using Bash and GNU core utilities for data fetching and processing tasks.</li>
+              <li>Implemented robust string manipulation, URL decoding, and parsing logic for unstructured web content.</li>
+              <li>Used %-decoding via Pearl and automated batch downloads and parsing workflows using curl, grep, awk, and sed.</li>
+            </ul>
+          </div>
+          <div class="project-meta">
+            <div class="project-date">August 2025</div>
+            <span class="project-lang">Bash</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="container">
+      <div class="section-label reveal">04 // education</div>
+      <div class="edu-list">
+        <div class="edu-card reveal">
+          <div class="edu-icon">🎓</div>
+          <div>
+            <div class="edu-degree">Master in Computer Applications</div>
+            <div class="edu-school">ITM University, Pune</div>
+            <div class="edu-period">June 2026</div>
+            <div class="edu-note">Studied Python, C/C++, Operating Systems &amp; Computer Networks.</div>
+          </div>
+        </div>
+        <div class="edu-card reveal">
+          <div class="edu-icon">📘</div>
+          <div>
+            <div class="edu-degree">Bachelor in Computer Science</div>
+            <div class="edu-school">Chhatrapati Shahu Ji Maharaj University</div>
+            <div class="edu-period">June 2023</div>
+            <div class="edu-note">Studied programming fundamentals in C.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications">
+    <div class="container">
+      <div class="section-label reveal">05 // certifications</div>
+      <div class="cert-grid">
+        <div class="cert-card reveal">
+          <div class="cert-dot red"></div>
+          <div>
+            <div class="cert-name">Red Hat Certified System Administrator (RHCSA)</div>
+            <div class="cert-org">Red Hat</div>
+            <div class="cert-date">March 2026</div>
+          </div>
+        </div>
+        <div class="cert-card reveal">
+          <div class="cert-dot amber"></div>
+          <div>
+            <div class="cert-name">Containers, Kubernetes &amp; OpenShift Overview</div>
+            <div class="cert-org">Red Hat</div>
+            <div class="cert-date">December 2025</div>
+          </div>
+        </div>
+        <div class="cert-card reveal">
+          <div class="cert-dot"></div>
+          <div>
+            <div class="cert-name">Introduction to Linux</div>
+            <div class="cert-org">The Linux Foundation</div>
+            <div class="cert-date">November 2025</div>
+          </div>
+        </div>
+        <div class="cert-card reveal">
+          <div class="cert-dot"></div>
+          <div>
+            <div class="cert-name">Introduction to Cloud Native Technologies</div>
+            <div class="cert-org">The Linux Foundation</div>
+            <div class="cert-date">December 2025</div>
+          </div>
+        </div>
+        <div class="cert-card reveal">
+          <div class="cert-dot cyan"></div>
+          <div>
+            <div class="cert-name">NDG Linux Essentials</div>
+            <div class="cert-org">Cisco Networking Academy</div>
+            <div class="cert-date">December 2025</div>
+          </div>
+        </div>
+        <div class="cert-card reveal">
+          <div class="cert-dot cyan"></div>
+          <div>
+            <div class="cert-name">Networking Basics</div>
+            <div class="cert-org">Cisco Networking Academy</div>
+            <div class="cert-date">December 2025</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /wrapper -->
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    <span class="prompt">$</span>
+    echo "Built with 💚 by <a href="mailto:nisheechaubey@gmail.com">Nishee Chaubey</a> · Pune, India · 2026"
+  </p>
+</footer>
+
+<script>
+  // ── Typing effect ──
+  const phrases = [
+    'whoami',
+    'cat resume.txt',
+    'sudo apt install talent',
+    'git log --oneline',
+    './portfolio --start'
+  ];
+  let pi = 0, ci = 0, deleting = false;
+  const el = document.getElementById('typed-text');
+  function type() {
+    const phrase = phrases[pi];
+    if (!deleting) {
+      el.textContent = phrase.slice(0, ++ci);
+      if (ci === phrase.length) { deleting = true; setTimeout(type, 1600); return; }
+    } else {
+      el.textContent = phrase.slice(0, --ci);
+      if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
+    }
+    setTimeout(type, deleting ? 40 : 80);
+  }
+  type();
+
+  // ── Scroll reveal ──
+  const obs = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.1 }
+  );
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 4) * 80}ms`;
+    obs.observe(el);
+  });
+</script>
+</body>
+</html>
